@@ -1,22 +1,83 @@
+using System.Xml.Serialization;
+
 namespace EFaturaEntegre
 {
-    public class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-        public string? Summary { get; set; }
-    }
-
     // using System.Xml.Serialization;
-    // XmlSerializer serializer = new XmlSerializer(typeof(Invoice));
+    // XmlSerializer serializer = new XmlSerializer(typeof(StandardBusinessDocument));
     // using (StringReader reader = new StringReader(xml))
     // {
-    //    var test = (Invoice)serializer.Deserialize(reader);
+    //    var test = (StandardBusinessDocument)serializer.Deserialize(reader);
     // }
+
+    [XmlRoot(ElementName = "ContactInformation")]
+    public class ContactInformation
+    {
+
+        [XmlElement(ElementName = "Contact")]
+        public string Contact;
+
+        [XmlElement(ElementName = "ContactTypeIdentifier")]
+        public string ContactTypeIdentifier;
+    }
+
+    [XmlRoot(ElementName = "Sender")]
+    public class Sender
+    {
+
+        [XmlElement(ElementName = "Identifier")]
+        public string Identifier;
+
+        [XmlElement(ElementName = "ContactInformation")]
+        public List<ContactInformation> ContactInformation;
+    }
+
+    [XmlRoot(ElementName = "Receiver")]
+    public class Receiver
+    {
+
+        [XmlElement(ElementName = "Identifier")]
+        public string Identifier;
+
+        [XmlElement(ElementName = "ContactInformation")]
+        public List<ContactInformation> ContactInformation;
+    }
+
+    [XmlRoot(ElementName = "DocumentIdentification")]
+    public class DocumentIdentification
+    {
+
+        [XmlElement(ElementName = "Standard")]
+        public object Standard;
+
+        [XmlElement(ElementName = "TypeVersion")]
+        public double TypeVersion;
+
+        [XmlElement(ElementName = "InstanceIdentifier")]
+        public string InstanceIdentifier;
+
+        [XmlElement(ElementName = "Type")]
+        public string Type;
+
+        [XmlElement(ElementName = "CreationDateAndTime")]
+        public DateTime CreationDateAndTime;
+    }
+
+    [XmlRoot(ElementName = "StandardBusinessDocumentHeader")]
+    public class StandardBusinessDocumentHeader
+    {
+
+        [XmlElement(ElementName = "HeaderVersion")]
+        public double HeaderVersion;
+
+        [XmlElement(ElementName = "Sender")]
+        public Sender Sender;
+
+        [XmlElement(ElementName = "Receiver")]
+        public Receiver Receiver;
+
+        [XmlElement(ElementName = "DocumentIdentification")]
+        public DocumentIdentification DocumentIdentification;
+    }
 
     [XmlRoot(ElementName = "CanonicalizationMethod")]
     public class CanonicalizationMethod
@@ -831,6 +892,62 @@ namespace EFaturaEntegre
 
         [XmlAttribute(AttributeName = "ds")]
         public string Ds;
+
+        [XmlAttribute(AttributeName = "xsi")]
+        public string Xsi;
+
+        [XmlAttribute(AttributeName = "schemaLocation")]
+        public string SchemaLocation;
+
+        [XmlText]
+        public string Text;
+    }
+
+    [XmlRoot(ElementName = "ElementList")]
+    public class ElementList
+    {
+
+        [XmlElement(ElementName = "Invoice")]
+        public Invoice Invoice;
+    }
+
+    [XmlRoot(ElementName = "Elements")]
+    public class Elements
+    {
+
+        [XmlElement(ElementName = "ElementType")]
+        public string ElementType;
+
+        [XmlElement(ElementName = "ElementCount")]
+        public int ElementCount;
+
+        [XmlElement(ElementName = "ElementList")]
+        public ElementList ElementList;
+    }
+
+    [XmlRoot(ElementName = "Package")]
+    public class Package
+    {
+
+        [XmlElement(ElementName = "Elements")]
+        public Elements Elements;
+    }
+
+    [XmlRoot(ElementName = "StandardBusinessDocument")]
+    public class StandardBusinessDocument
+    {
+
+        [XmlElement(ElementName = "StandardBusinessDocumentHeader")]
+        public StandardBusinessDocumentHeader StandardBusinessDocumentHeader;
+
+        [XmlElement(ElementName = "Package")]
+        public Package Package;
+
+        [XmlAttribute(AttributeName = "sh")]
+        public string Sh;
+
+        [XmlAttribute(AttributeName = "ef")]
+        public string Ef;
 
         [XmlAttribute(AttributeName = "xsi")]
         public string Xsi;
