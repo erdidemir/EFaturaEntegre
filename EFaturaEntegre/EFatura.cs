@@ -1,963 +1,401 @@
+using System;
+using System.IO;
 using System.Xml.Serialization;
+using System.Collections.Generic;
+using System.Xml;
 
-namespace EFaturaEntegre
+public class EFatura
 {
-    // using System.Xml.Serialization;
-    // XmlSerializer serializer = new XmlSerializer(typeof(StandardBusinessDocument));
-    // using (StringReader reader = new StringReader(xml))
-    // {
-    //    var test = (StandardBusinessDocument)serializer.Deserialize(reader);
-    // }
-
-    [XmlRoot(ElementName = "ContactInformation")]
-    public class ContactInformation
-    {
-
-        [XmlElement(ElementName = "Contact")]
-        public string Contact;
-
-        [XmlElement(ElementName = "ContactTypeIdentifier")]
-        public string ContactTypeIdentifier;
-    }
-
-    [XmlRoot(ElementName = "Sender")]
-    public class Sender
-    {
-
-        [XmlElement(ElementName = "Identifier")]
-        public string Identifier;
-
-        [XmlElement(ElementName = "ContactInformation")]
-        public List<ContactInformation> ContactInformation;
-    }
-
-    [XmlRoot(ElementName = "Receiver")]
-    public class Receiver
-    {
-
-        [XmlElement(ElementName = "Identifier")]
-        public string Identifier;
-
-        [XmlElement(ElementName = "ContactInformation")]
-        public List<ContactInformation> ContactInformation;
-    }
-
-    [XmlRoot(ElementName = "DocumentIdentification")]
-    public class DocumentIdentification
-    {
-
-        [XmlElement(ElementName = "Standard")]
-        public object Standard;
-
-        [XmlElement(ElementName = "TypeVersion")]
-        public double TypeVersion;
-
-        [XmlElement(ElementName = "InstanceIdentifier")]
-        public string InstanceIdentifier;
-
-        [XmlElement(ElementName = "Type")]
-        public string Type;
-
-        [XmlElement(ElementName = "CreationDateAndTime")]
-        public DateTime CreationDateAndTime;
-    }
-
-    [XmlRoot(ElementName = "StandardBusinessDocumentHeader")]
-    public class StandardBusinessDocumentHeader
-    {
-
-        [XmlElement(ElementName = "HeaderVersion")]
-        public double HeaderVersion;
-
-        [XmlElement(ElementName = "Sender")]
-        public Sender Sender;
-
-        [XmlElement(ElementName = "Receiver")]
-        public Receiver Receiver;
-
-        [XmlElement(ElementName = "DocumentIdentification")]
-        public DocumentIdentification DocumentIdentification;
-    }
-
-    [XmlRoot(ElementName = "CanonicalizationMethod")]
-    public class CanonicalizationMethod
-    {
-
-        [XmlAttribute(AttributeName = "Algorithm")]
-        public string Algorithm;
-    }
-
-    [XmlRoot(ElementName = "SignatureMethod")]
-    public class SignatureMethod
-    {
-
-        [XmlAttribute(AttributeName = "Algorithm")]
-        public string Algorithm;
-    }
-
-    [XmlRoot(ElementName = "Transform")]
-    public class Transform
-    {
-
-        [XmlAttribute(AttributeName = "Algorithm")]
-        public string Algorithm;
-    }
-
-    [XmlRoot(ElementName = "Transforms")]
-    public class Transforms
-    {
-
-        [XmlElement(ElementName = "Transform")]
-        public Transform Transform;
-    }
-
-    [XmlRoot(ElementName = "DigestMethod")]
-    public class DigestMethod
-    {
-
-        [XmlAttribute(AttributeName = "Algorithm")]
-        public string Algorithm;
-    }
-
-    [XmlRoot(ElementName = "Reference")]
-    public class Reference
-    {
-
-        [XmlElement(ElementName = "Transforms")]
-        public Transforms Transforms;
-
-        [XmlElement(ElementName = "DigestMethod")]
-        public DigestMethod DigestMethod;
-
-        [XmlElement(ElementName = "DigestValue")]
-        public string DigestValue;
-
-        [XmlAttribute(AttributeName = "URI")]
-        public object URI;
-
-        [XmlText]
-        public string Text;
-
-        [XmlAttribute(AttributeName = "Id")]
-        public string Id;
-
-        [XmlAttribute(AttributeName = "Type")]
-        public string Type;
-    }
-
-    [XmlRoot(ElementName = "SignedInfo")]
-    public class SignedInfo
-    {
-
-        [XmlElement(ElementName = "CanonicalizationMethod")]
-        public CanonicalizationMethod CanonicalizationMethod;
-
-        [XmlElement(ElementName = "SignatureMethod")]
-        public SignatureMethod SignatureMethod;
-
-        [XmlElement(ElementName = "Reference")]
-        public List<Reference> Reference;
-
-        [XmlAttribute(AttributeName = "Id")]
-        public string Id;
-
-        [XmlText]
-        public string Text;
-    }
-
-    [XmlRoot(ElementName = "SignatureValue")]
-    public class SignatureValue
-    {
-
-        [XmlAttribute(AttributeName = "Id")]
-        public string Id;
-
-        [XmlText]
-        public string Text;
-    }
-
-    [XmlRoot(ElementName = "RSAKeyValue")]
-    public class RSAKeyValue
-    {
-
-        [XmlElement(ElementName = "Modulus")]
-        public string Modulus;
-
-        [XmlElement(ElementName = "Exponent")]
-        public string Exponent;
-    }
-
-    [XmlRoot(ElementName = "KeyValue")]
-    public class KeyValue
-    {
-
-        [XmlElement(ElementName = "RSAKeyValue")]
-        public RSAKeyValue RSAKeyValue;
-    }
-
-    [XmlRoot(ElementName = "X509Data")]
-    public class X509Data
-    {
-
-        [XmlElement(ElementName = "X509SubjectName")]
-        public string X509SubjectName;
-
-        [XmlElement(ElementName = "X509Certificate")]
-        public string X509Certificate;
-    }
-
-    [XmlRoot(ElementName = "KeyInfo")]
-    public class KeyInfo
-    {
-
-        [XmlElement(ElementName = "KeyValue")]
-        public KeyValue KeyValue;
-
-        [XmlElement(ElementName = "X509Data")]
-        public X509Data X509Data;
-    }
-
-    [XmlRoot(ElementName = "CertDigest")]
-    public class CertDigest
-    {
-
-        [XmlElement(ElementName = "DigestMethod")]
-        public DigestMethod DigestMethod;
-
-        [XmlElement(ElementName = "DigestValue")]
-        public string DigestValue;
-    }
-
-    [XmlRoot(ElementName = "IssuerSerial")]
-    public class IssuerSerial
-    {
-
-        [XmlElement(ElementName = "X509IssuerName")]
-        public string X509IssuerName;
-
-        [XmlElement(ElementName = "X509SerialNumber")]
-        public double X509SerialNumber;
-    }
-
-    [XmlRoot(ElementName = "Cert")]
-    public class Cert
-    {
-
-        [XmlElement(ElementName = "CertDigest")]
-        public CertDigest CertDigest;
-
-        [XmlElement(ElementName = "IssuerSerial")]
-        public IssuerSerial IssuerSerial;
-    }
-
-    [XmlRoot(ElementName = "SigningCertificate")]
-    public class SigningCertificate
-    {
-
-        [XmlElement(ElementName = "Cert")]
-        public Cert Cert;
-    }
-
-    [XmlRoot(ElementName = "ClaimedRoles")]
-    public class ClaimedRoles
-    {
-
-        [XmlElement(ElementName = "ClaimedRole")]
-        public string ClaimedRole;
-    }
-
-    [XmlRoot(ElementName = "SignerRole")]
-    public class SignerRole
-    {
-
-        [XmlElement(ElementName = "ClaimedRoles")]
-        public ClaimedRoles ClaimedRoles;
-    }
-
-    [XmlRoot(ElementName = "SignedSignatureProperties")]
-    public class SignedSignatureProperties
-    {
-
-        [XmlElement(ElementName = "SigningTime")]
-        public DateTime SigningTime;
-
-        [XmlElement(ElementName = "SigningCertificate")]
-        public SigningCertificate SigningCertificate;
-
-        [XmlElement(ElementName = "SignerRole")]
-        public SignerRole SignerRole;
-    }
-
-    [XmlRoot(ElementName = "SignedProperties")]
-    public class SignedProperties
-    {
-
-        [XmlElement(ElementName = "SignedSignatureProperties")]
-        public SignedSignatureProperties SignedSignatureProperties;
-
-        [XmlAttribute(AttributeName = "Id")]
-        public string Id;
-
-        [XmlText]
-        public string Text;
-    }
-
-    [XmlRoot(ElementName = "QualifyingProperties")]
-    public class QualifyingProperties
-    {
-
-        [XmlElement(ElementName = "SignedProperties")]
-        public SignedProperties SignedProperties;
-
-        [XmlAttribute(AttributeName = "Target")]
-        public string Target;
-
-        [XmlText]
-        public string Text;
-    }
-
-    [XmlRoot(ElementName = "Object")]
-    public class Object
-    {
-
-        [XmlElement(ElementName = "QualifyingProperties")]
-        public QualifyingProperties QualifyingProperties;
-    }
-
-    [XmlRoot(ElementName = "Signature")]
-    public class Signature
-    {
-
-        [XmlElement(ElementName = "SignedInfo")]
-        public SignedInfo SignedInfo;
-
-        [XmlElement(ElementName = "SignatureValue")]
-        public SignatureValue SignatureValue;
-
-        [XmlElement(ElementName = "KeyInfo")]
-        public KeyInfo KeyInfo;
-
-        [XmlElement(ElementName = "Object")]
-        public Object Object;
-
-        [XmlAttribute(AttributeName = "Id")]
-        public string Id;
-
-        [XmlText]
-        public string Text;
-
-        [XmlElement(ElementName = "ID")]
-        public ID ID;
-
-        [XmlElement(ElementName = "SignatoryParty")]
-        public SignatoryParty SignatoryParty;
-
-        [XmlElement(ElementName = "DigitalSignatureAttachment")]
-        public DigitalSignatureAttachment DigitalSignatureAttachment;
-    }
-
-    [XmlRoot(ElementName = "ExtensionContent")]
-    public class ExtensionContent
-    {
-
-        [XmlElement(ElementName = "Signature")]
-        public Signature Signature;
-    }
-
-    [XmlRoot(ElementName = "UBLExtension")]
-    public class UBLExtension
-    {
-
-        [XmlElement(ElementName = "ExtensionContent")]
-        public ExtensionContent ExtensionContent;
-    }
-
-    [XmlRoot(ElementName = "UBLExtensions")]
-    public class UBLExtensions
-    {
-
-        [XmlElement(ElementName = "UBLExtension")]
-        public UBLExtension UBLExtension;
-    }
-
-    [XmlRoot(ElementName = "DocumentCurrencyCode")]
-    public class DocumentCurrencyCode
-    {
-
-        [XmlAttribute(AttributeName = "listAgencyName")]
-        public string ListAgencyName;
-
-        [XmlAttribute(AttributeName = "listID")]
-        public string ListID;
-
-        [XmlAttribute(AttributeName = "listName")]
-        public string ListName;
-
-        [XmlAttribute(AttributeName = "listVersionID")]
-        public int ListVersionID;
-
-        [XmlText]
-        public string Text;
-    }
-
-    [XmlRoot(ElementName = "EmbeddedDocumentBinaryObject")]
-    public class EmbeddedDocumentBinaryObject
-    {
-
-        [XmlAttribute(AttributeName = "characterSetCode")]
-        public string CharacterSetCode;
-
-        [XmlAttribute(AttributeName = "encodingCode")]
-        public string EncodingCode;
-
-        [XmlAttribute(AttributeName = "filename")]
-        public string Filename;
-
-        [XmlAttribute(AttributeName = "mimeCode")]
-        public string MimeCode;
-
-        [XmlText]
-        public string Text;
-    }
-
-    [XmlRoot(ElementName = "Attachment")]
-    public class Attachment
-    {
-
-        [XmlElement(ElementName = "EmbeddedDocumentBinaryObject")]
-        public EmbeddedDocumentBinaryObject EmbeddedDocumentBinaryObject;
-    }
-
-    [XmlRoot(ElementName = "AdditionalDocumentReference")]
-    public class AdditionalDocumentReference
-    {
-
-        [XmlElement(ElementName = "ID")]
-        public string ID;
-
-        [XmlElement(ElementName = "IssueDate")]
-        public DateTime IssueDate;
-
-        [XmlElement(ElementName = "Attachment")]
-        public Attachment Attachment;
-    }
-
-    [XmlRoot(ElementName = "ID")]
-    public class ID
-    {
-
-        [XmlAttribute(AttributeName = "schemeID")]
-        public string SchemeID;
-
-        [XmlText]
-        public double Text;
-    }
-
-    [XmlRoot(ElementName = "PartyIdentification")]
-    public class PartyIdentification
-    {
-
-        [XmlElement(ElementName = "ID")]
-        public ID ID;
-    }
-
-    [XmlRoot(ElementName = "Country")]
-    public class Country
-    {
-
-        [XmlElement(ElementName = "Name")]
-        public string Name;
-    }
-
-    [XmlRoot(ElementName = "PostalAddress")]
-    public class PostalAddress
-    {
-
-        [XmlElement(ElementName = "Room")]
-        public int Room;
-
-        [XmlElement(ElementName = "StreetName")]
-        public string StreetName;
-
-        [XmlElement(ElementName = "BuildingName")]
-        public string BuildingName;
-
-        [XmlElement(ElementName = "BuildingNumber")]
-        public int BuildingNumber;
-
-        [XmlElement(ElementName = "CitySubdivisionName")]
-        public string CitySubdivisionName;
-
-        [XmlElement(ElementName = "CityName")]
-        public string CityName;
-
-        [XmlElement(ElementName = "PostalZone")]
-        public int PostalZone;
-
-        [XmlElement(ElementName = "Region")]
-        public string Region;
-
-        [XmlElement(ElementName = "Country")]
-        public Country Country;
-    }
-
-    [XmlRoot(ElementName = "SignatoryParty")]
-    public class SignatoryParty
-    {
-
-        [XmlElement(ElementName = "PartyIdentification")]
-        public PartyIdentification PartyIdentification;
-
-        [XmlElement(ElementName = "PostalAddress")]
-        public PostalAddress PostalAddress;
-    }
-
-    [XmlRoot(ElementName = "ExternalReference")]
-    public class ExternalReference
-    {
-
-        [XmlElement(ElementName = "URI")]
-        public string URI;
-    }
-
-    [XmlRoot(ElementName = "DigitalSignatureAttachment")]
-    public class DigitalSignatureAttachment
-    {
-
-        [XmlElement(ElementName = "ExternalReference")]
-        public ExternalReference ExternalReference;
-    }
-
-    [XmlRoot(ElementName = "PartyName")]
-    public class PartyName
-    {
-
-        [XmlElement(ElementName = "Name")]
-        public string Name;
-    }
-
-    [XmlRoot(ElementName = "TaxScheme")]
-    public class TaxScheme
-    {
-
-        [XmlElement(ElementName = "Name")]
-        public string Name;
-
-        [XmlElement(ElementName = "TaxTypeCode")]
-        public int TaxTypeCode;
-    }
-
-    [XmlRoot(ElementName = "PartyTaxScheme")]
-    public class PartyTaxScheme
-    {
-
-        [XmlElement(ElementName = "TaxScheme")]
-        public TaxScheme TaxScheme;
-    }
-
-    [XmlRoot(ElementName = "Contact")]
-    public class Contact
-    {
-
-        [XmlElement(ElementName = "Telephone")]
-        public double Telephone;
-
-        [XmlElement(ElementName = "Telefax")]
-        public double Telefax;
-
-        [XmlElement(ElementName = "ElectronicMail")]
-        public string ElectronicMail;
-    }
-
-    [XmlRoot(ElementName = "Party")]
-    public class Party
-    {
-
-        [XmlElement(ElementName = "PartyIdentification")]
-        public PartyIdentification PartyIdentification;
-
-        [XmlElement(ElementName = "PartyName")]
-        public PartyName PartyName;
-
-        [XmlElement(ElementName = "PostalAddress")]
-        public PostalAddress PostalAddress;
-
-        [XmlElement(ElementName = "PartyTaxScheme")]
-        public PartyTaxScheme PartyTaxScheme;
-
-        [XmlElement(ElementName = "Contact")]
-        public Contact Contact;
-    }
-
-    [XmlRoot(ElementName = "AccountingSupplierParty")]
-    public class AccountingSupplierParty
-    {
-
-        [XmlElement(ElementName = "Party")]
-        public Party Party;
-    }
-
-    [XmlRoot(ElementName = "AccountingCustomerParty")]
-    public class AccountingCustomerParty
-    {
-
-        [XmlElement(ElementName = "Party")]
-        public Party Party;
-    }
-
-    [XmlRoot(ElementName = "TaxAmount")]
-    public class TaxAmount
-    {
-
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
-
-        [XmlText]
-        public double Text;
-    }
-
-    [XmlRoot(ElementName = "TaxableAmount")]
-    public class TaxableAmount
-    {
-
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
-
-        [XmlText]
-        public double Text;
-    }
-
-    [XmlRoot(ElementName = "TaxCategory")]
-    public class TaxCategory
-    {
-
-        [XmlElement(ElementName = "TaxScheme")]
-        public TaxScheme TaxScheme;
-    }
-
-    [XmlRoot(ElementName = "TaxSubtotal")]
-    public class TaxSubtotal
-    {
-
-        [XmlElement(ElementName = "TaxableAmount")]
-        public TaxableAmount TaxableAmount;
-
-        [XmlElement(ElementName = "TaxAmount")]
-        public TaxAmount TaxAmount;
-
-        [XmlElement(ElementName = "CalculationSequenceNumeric")]
-        public int CalculationSequenceNumeric;
-
-        [XmlElement(ElementName = "Percent")]
-        public int Percent;
-
-        [XmlElement(ElementName = "TaxCategory")]
-        public TaxCategory TaxCategory;
-    }
-
-    [XmlRoot(ElementName = "TaxTotal")]
-    public class TaxTotal
-    {
-
-        [XmlElement(ElementName = "TaxAmount")]
-        public TaxAmount TaxAmount;
-
-        [XmlElement(ElementName = "TaxSubtotal")]
-        public TaxSubtotal TaxSubtotal;
-    }
-
-    [XmlRoot(ElementName = "LineExtensionAmount")]
-    public class LineExtensionAmount
-    {
-
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
-
-        [XmlText]
-        public double Text;
-    }
-
-    [XmlRoot(ElementName = "TaxExclusiveAmount")]
-    public class TaxExclusiveAmount
-    {
-
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
-
-        [XmlText]
-        public double Text;
-    }
-
-    [XmlRoot(ElementName = "TaxInclusiveAmount")]
-    public class TaxInclusiveAmount
-    {
+    public StandardBusinessDocument GetFatura()
+    {
+        // Örnek bir StandardBusinessDocument oluþtur
+        StandardBusinessDocument sbd = new StandardBusinessDocument
+        {
+            StandardBusinessDocumentHeader = new StandardBusinessDocumentHeader
+            {
+                // Header bilgilerini doldur
+                // Örnek veri ile dolduruldu, gerçek verilerle deðiþtirilmeli
+                HeaderVersion = 1.0,
+                Sender = new Sender
+                {
+                    Identifier = "SenderIdentifier",
+                    ContactInformation = new List<ContactInformation>
+                    {
+                        new ContactInformation
+                        {
+                            Contact = "SenderContact",
+                            ContactTypeIdentifier = "SenderContactType"
+                        }
+                    }
+                },
+                Receiver = new Receiver
+                {
+                    Identifier = "ReceiverIdentifier",
+                    ContactInformation = new List<ContactInformation>
+                    {
+                        new ContactInformation
+                        {
+                            Contact = "ReceiverContact",
+                            ContactTypeIdentifier = "ReceiverContactType"
+                        }
+                    }
+                },
+                DocumentIdentification = new DocumentIdentification
+                {
+                    Standard = "ExampleStandard",
+                    TypeVersion = 1.0,
+                    InstanceIdentifier = Guid.NewGuid().ToString(),
+                    Type = "ExampleType",
+                    CreationDateAndTime = DateTime.UtcNow
+                }
+            },
+            Package = new Package
+            {
+                Elements = new Elements
+                {
+                    ElementType = "ExampleElementType",
+                    ElementCount = 1,
+                    ElementList = new ElementList
+                    {
+                        Invoice = new Invoice
+                        {
+                            // Fatura bilgilerini doldur
+                            // Örnek veri ile dolduruldu, gerçek verilerle deðiþtirilmeli
+                            UBLVersionID = 2.1,
+                            CustomizationID = "CustomizationID",
+                            ProfileID = "ProfileID",
+                            ID = "InvoiceID",
+                            CopyIndicator = false,
+                            UUID = Guid.NewGuid().ToString(),
+                            IssueDate = DateTime.UtcNow,
+                            InvoiceTypeCode = "InvoiceType",
+                            Note = "Example note",
+                            DocumentCurrencyCode = new DocumentCurrencyCode
+                            {
+                                ListAgencyName = "CurrencyListAgency",
+                                ListID = "CurrencyListID",
+                                ListName = "CurrencyListName",
+                                ListVersionID = 1,
+                                Text = "USD"
+                            },
+                            LineCountNumeric = 1,
+                            // Diðer fatura detaylarý buraya eklenmeli
+                            // Bu sadece örnek bir veridir
+                            InvoiceLine = new InvoiceLine
+                            {
+                                ID = 1,
+                                InvoicedQuantity = new InvoicedQuantity
+                                {
+                                    UnitCode = "UnitCode",
+                                    Text = 1
+                                },
+                                LineExtensionAmount = new LineExtensionAmount
+                                {
+                                    CurrencyID = "USD",
+                                    Text = 100
+                                },
+                                // Diðer detaylar buraya eklenecek
+                                // Örnek veri ile dolduruldu, gerçek verilerle deðiþtirilmeli
+                                Item = new Item
+                                {
+                                    Name = "ItemName"
+                                },
+                                Price = new Price
+                                {
+                                    PriceAmount = new PriceAmount
+                                    {
+                                        CurrencyID = "USD",
+                                        Text = 100
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
 
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
-
-        [XmlText]
-        public DateTime Text;
+        return sbd;
     }
-
-    [XmlRoot(ElementName = "AllowanceTotalAmount")]
-    public class AllowanceTotalAmount
-    {
 
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
-
-        [XmlText]
-        public double Text;
-    }
 
-    [XmlRoot(ElementName = "PayableAmount")]
-    public class PayableAmount
+    public void GetFatura2(StandardBusinessDocument standardBusinessDocument)
     {
+        // XML belgesi oluþturma
+        XmlDocument xmlDoc = new XmlDocument();
 
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
+        // Kök öðe oluþturma
+        XmlElement root = xmlDoc.CreateElement("sh:StandardBusinessDocument");
+        xmlDoc.AppendChild(root);
 
-        [XmlText]
-        public DateTime Text;
-    }
+        // xsi, sh, ef isim alanlarýný ekleyin
+        XmlAttribute xsiAttr = xmlDoc.CreateAttribute("xmlns:xsi");
+        xsiAttr.Value = "http://www.w3.org/2001/XMLSchema-instance";
+        root.Attributes.Append(xsiAttr);
 
-    [XmlRoot(ElementName = "LegalMonetaryTotal")]
-    public class LegalMonetaryTotal
-    {
+        XmlAttribute schemaLocAttr = xmlDoc.CreateAttribute("xsi:schemaLocation");
+        schemaLocAttr.Value = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader PackageProxy_1_2.xsd";
+        root.Attributes.Append(schemaLocAttr);
 
-        [XmlElement(ElementName = "LineExtensionAmount")]
-        public LineExtensionAmount LineExtensionAmount;
+        XmlAttribute shAttr = xmlDoc.CreateAttribute("xmlns:sh");
+        shAttr.Value = "http://www.unece.org/cefact/namespaces/StandardBusinessDocumentHeader";
+        root.Attributes.Append(shAttr);
 
-        [XmlElement(ElementName = "TaxExclusiveAmount")]
-        public TaxExclusiveAmount TaxExclusiveAmount;
+        XmlAttribute efAttr = xmlDoc.CreateAttribute("xmlns:ef");
+        efAttr.Value = "http://www.efatura.gov.tr/package-namespace";
+        root.Attributes.Append(efAttr);
 
-        [XmlElement(ElementName = "TaxInclusiveAmount")]
-        public TaxInclusiveAmount TaxInclusiveAmount;
+        #region <sh:StandardBusinessDocumentHeader>
 
-        [XmlElement(ElementName = "AllowanceTotalAmount")]
-        public AllowanceTotalAmount AllowanceTotalAmount;
+        // StandardBusinessDocumentHeader öðesini oluþturma
+        XmlElement header = xmlDoc.CreateElement("sh:StandardBusinessDocumentHeader");
+        root.AppendChild(header);
 
-        [XmlElement(ElementName = "PayableAmount")]
-        public PayableAmount PayableAmount;
-    }
+        // Sender öðesini oluþturma
+        XmlElement sender = xmlDoc.CreateElement("sh:Sender");
+        header.AppendChild(sender);
 
-    [XmlRoot(ElementName = "InvoicedQuantity")]
-    public class InvoicedQuantity
-    {
+        // Sender'ýn Identifier öðesini oluþturma
+        XmlElement senderIdentifier = xmlDoc.CreateElement("sh:Identifier");
+        senderIdentifier.InnerText = "urn:mail:defaultgb@gib.gov.tr";
+        sender.AppendChild(senderIdentifier);
 
-        [XmlAttribute(AttributeName = "unitCode")]
-        public string UnitCode;
+        // Sender'ýn ContactInformation öðelerini oluþturma
+        XmlElement senderContactInfo1 = xmlDoc.CreateElement("sh:ContactInformation");
+        sender.AppendChild(senderContactInfo1);
 
-        [XmlText]
-        public int Text;
-    }
+        XmlElement senderContact1 = xmlDoc.CreateElement("sh:Contact");
+        senderContact1.InnerText = "e-Fatura Deneme A.Þ.";
+        senderContactInfo1.AppendChild(senderContact1);
 
-    [XmlRoot(ElementName = "Item")]
-    public class Item
-    {
+        XmlElement senderContactType1 = xmlDoc.CreateElement("sh:ContactTypeIdentifier");
+        senderContactType1.InnerText = "UNVAN";
+        senderContactInfo1.AppendChild(senderContactType1);
 
-        [XmlElement(ElementName = "Name")]
-        public string Name;
-    }
+        XmlElement senderContactInfo2 = xmlDoc.CreateElement("sh:ContactInformation");
+        sender.AppendChild(senderContactInfo2);
 
-    [XmlRoot(ElementName = "PriceAmount")]
-    public class PriceAmount
-    {
+        XmlElement senderContact2 = xmlDoc.CreateElement("sh:Contact");
+        senderContact2.InnerText = "9999999999";
+        senderContactInfo2.AppendChild(senderContact2);
 
-        [XmlAttribute(AttributeName = "currencyID")]
-        public string CurrencyID;
+        XmlElement senderContactType2 = xmlDoc.CreateElement("sh:ContactTypeIdentifier");
+        senderContactType2.InnerText = "VKN_TCKN";
+        senderContactInfo2.AppendChild(senderContactType2);
 
-        [XmlText]
-        public int Text;
-    }
+        // Receiver öðesini oluþturma (Sender ile benzer þekilde)
+        XmlElement receiver = xmlDoc.CreateElement("sh:Receiver");
+        header.AppendChild(receiver);
 
-    [XmlRoot(ElementName = "Price")]
-    public class Price
-    {
+        // DocumentIdentification öðesini oluþturma
+        XmlElement docIdentification = xmlDoc.CreateElement("sh:DocumentIdentification");
+        header.AppendChild(docIdentification);
 
-        [XmlElement(ElementName = "PriceAmount")]
-        public PriceAmount PriceAmount;
-    }
+        #endregion
 
-    [XmlRoot(ElementName = "InvoiceLine")]
-    public class InvoiceLine
-    {
 
-        [XmlElement(ElementName = "ID")]
-        public int ID;
+        // DocumentIdentification'ýn alt öðelerini oluþturma
+        XmlElement standard = xmlDoc.CreateElement("sh:Standard");
+        docIdentification.AppendChild(standard);
 
-        [XmlElement(ElementName = "InvoicedQuantity")]
-        public InvoicedQuantity InvoicedQuantity;
+        XmlElement typeVersion = xmlDoc.CreateElement("sh:TypeVersion");
+        typeVersion.InnerText = "1.0";
+        docIdentification.AppendChild(typeVersion);
 
-        [XmlElement(ElementName = "LineExtensionAmount")]
-        public LineExtensionAmount LineExtensionAmount;
+        XmlElement instanceIdentifier = xmlDoc.CreateElement("sh:InstanceIdentifier");
+        instanceIdentifier.InnerText = "e002da78-223f-438c-addb-16badeb047b5";
+        docIdentification.AppendChild(instanceIdentifier);
 
-        [XmlElement(ElementName = "TaxTotal")]
-        public TaxTotal TaxTotal;
+        XmlElement type = xmlDoc.CreateElement("sh:Type");
+        type.InnerText = "SENDERENVELOPE";
+        docIdentification.AppendChild(type);
 
-        [XmlElement(ElementName = "Item")]
-        public Item Item;
+        XmlElement creationDateAndTime = xmlDoc.CreateElement("sh:CreationDateAndTime");
+        creationDateAndTime.InnerText = "2013-06-19T14:47:55";
+        docIdentification.AppendChild(creationDateAndTime);
 
-        [XmlElement(ElementName = "Price")]
-        public Price Price;
-    }
+        // Package öðesini oluþturma
+        XmlElement package = xmlDoc.CreateElement("ef:Package");
+        root.AppendChild(package);
 
-    [XmlRoot(ElementName = "Invoice")]
-    public class Invoice
-    {
+        // Package'ýn alt öðelerini oluþturma
+        XmlElement elements = xmlDoc.CreateElement("Elements");
+        package.AppendChild(elements);
 
-        [XmlElement(ElementName = "UBLExtensions")]
-        public UBLExtensions UBLExtensions;
+        XmlElement elementType = xmlDoc.CreateElement("ElementType");
+        elementType.InnerText = "INVOICE";
+        elements.AppendChild(elementType);
 
-        [XmlElement(ElementName = "UBLVersionID")]
-        public double UBLVersionID;
+        XmlElement elementCount = xmlDoc.CreateElement("ElementCount");
+        elementCount.InnerText = "1";
+        elements.AppendChild(elementCount);
 
-        [XmlElement(ElementName = "CustomizationID")]
-        public string CustomizationID;
+        XmlElement elementList = xmlDoc.CreateElement("ElementList");
+        elements.AppendChild(elementList);
 
-        [XmlElement(ElementName = "ProfileID")]
-        public string ProfileID;
+        // Invoice öðesini oluþturma
+        XmlElement invoice = xmlDoc.CreateElement("Invoice", "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2");
+        invoice.SetAttribute("xmlns:cac", "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
+        // ... Diðer namespace'leri ve attribute'leri buraya ekleyebilirsiniz ...
 
-        [XmlElement(ElementName = "ID")]
-        public string ID;
+        elementList.AppendChild(invoice);
 
-        [XmlElement(ElementName = "CopyIndicator")]
-        public bool CopyIndicator;
+        // Invoice'ýn alt öðelerini oluþturma
 
-        [XmlElement(ElementName = "UUID")]
-        public string UUID;
+        // ext:UBLExtensions öðesi
+        XmlElement ublExtensions = xmlDoc.CreateElement("ext:UBLExtensions");
+        invoice.AppendChild(ublExtensions);
 
-        [XmlElement(ElementName = "IssueDate")]
-        public DateTime IssueDate;
+        // ext:UBLExtension öðesi
+        XmlElement ublExtension = xmlDoc.CreateElement("ext:UBLExtension");
+        ublExtensions.AppendChild(ublExtension);
 
-        [XmlElement(ElementName = "InvoiceTypeCode")]
-        public string InvoiceTypeCode;
+        // ext:ExtensionContent öðesi
+        XmlElement extensionContent = xmlDoc.CreateElement("ext:ExtensionContent");
+        ublExtension.AppendChild(extensionContent);
 
-        [XmlElement(ElementName = "Note")]
-        public string Note;
+        // ds:Signature öðesi
+        XmlElement signature = xmlDoc.CreateElement("ds:Signature", "http://www.w3.org/2000/09/xmldsig#");
+        extensionContent.AppendChild(signature);
 
-        [XmlElement(ElementName = "DocumentCurrencyCode")]
-        public DocumentCurrencyCode DocumentCurrencyCode;
+        // ds:SignedInfo öðesi
+        XmlElement signedInfo = xmlDoc.CreateElement("ds:SignedInfo");
+        signature.AppendChild(signedInfo);
 
-        [XmlElement(ElementName = "LineCountNumeric")]
-        public int LineCountNumeric;
+        // ds:CanonicalizationMethod öðesi
+        XmlElement canonicalizationMethod = xmlDoc.CreateElement("ds:CanonicalizationMethod");
+        canonicalizationMethod.SetAttribute("Algorithm", "http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments");
+        signedInfo.AppendChild(canonicalizationMethod);
 
-        [XmlElement(ElementName = "AdditionalDocumentReference")]
-        public AdditionalDocumentReference AdditionalDocumentReference;
+        // ds:SignatureMethod öðesi
+        XmlElement signatureMethod = xmlDoc.CreateElement("ds:SignatureMethod");
+        signatureMethod.SetAttribute("Algorithm", "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256");
+        signedInfo.AppendChild(signatureMethod);
 
-        [XmlElement(ElementName = "Signature")]
-        public Signature Signature;
+        // ds:Reference öðesi
+        XmlElement reference = xmlDoc.CreateElement("ds:Reference");
+        reference.SetAttribute("URI", "");
+        signedInfo.AppendChild(reference);
 
-        [XmlElement(ElementName = "AccountingSupplierParty")]
-        public AccountingSupplierParty AccountingSupplierParty;
+        // ... ds:Reference alt öðeleri buraya eklenmeli (ds:DigestMethod, ds:Transforms, ds:DigestValue) ...
 
-        [XmlElement(ElementName = "AccountingCustomerParty")]
-        public AccountingCustomerParty AccountingCustomerParty;
+        // ds:SignatureValue öðesi
+        XmlElement signatureValue = xmlDoc.CreateElement("ds:SignatureValue");
+        signatureValue.SetAttribute("Id", "id1");
+        signatureValue.InnerText = "..."; // Buraya imza deðerini eklemelisiniz
+        signature.AppendChild(signatureValue);
 
-        [XmlElement(ElementName = "TaxTotal")]
-        public TaxTotal TaxTotal;
+        // ds:KeyInfo öðesi
+        XmlElement keyInfo = xmlDoc.CreateElement("ds:KeyInfo");
+        signature.AppendChild(keyInfo);
 
-        [XmlElement(ElementName = "LegalMonetaryTotal")]
-        public LegalMonetaryTotal LegalMonetaryTotal;
+        // ... ds:KeyInfo alt öðeleri buraya eklenmeli (ds:KeyValue, ds:X509Data) ...
 
-        [XmlElement(ElementName = "InvoiceLine")]
-        public InvoiceLine InvoiceLine;
+        // ds:Object öðesi
+        XmlElement obj = xmlDoc.CreateElement("ds:Object");
+        signature.AppendChild(obj);
 
-        [XmlAttribute(AttributeName = "xmlns")]
-        public string Xmlns;
+        // xades:QualifyingProperties öðesi
+        XmlElement qualifyingProps = xmlDoc.CreateElement("xades:QualifyingProperties");
+        qualifyingProps.SetAttribute("Target", "#Signature_TST2013000000766");
+        obj.AppendChild(qualifyingProps);
 
-        [XmlAttribute(AttributeName = "cac")]
-        public string Cac;
+        // xades:SignedProperties öðesi
+        XmlElement signedProps = xmlDoc.CreateElement("xades:SignedProperties");
+        signedProps.SetAttribute("Id", "SignedProperties");
+        qualifyingProps.AppendChild(signedProps);
 
-        [XmlAttribute(AttributeName = "xades")]
-        public string Xades;
+        // xades:SignedSignatureProperties öðesi
+        XmlElement signedSigProps = xmlDoc.CreateElement("xades:SignedSignatureProperties");
+        signedProps.AppendChild(signedSigProps);
 
-        [XmlAttribute(AttributeName = "udt")]
-        public string Udt;
+        // xades:SigningTime öðesi
+        XmlElement signingTime = xmlDoc.CreateElement("xades:SigningTime");
+        signingTime.InnerText = "2013-06-19T14:47:55.311+03:00";
+        signedSigProps.AppendChild(signingTime);
 
-        [XmlAttribute(AttributeName = "cbc")]
-        public string Cbc;
+        // xades:SigningCertificate öðesi
+        // ... Diðer alt öðeleri buraya eklemelisiniz ...
 
-        [XmlAttribute(AttributeName = "ccts")]
-        public string Ccts;
+        // xades:SignerRole öðesi
+        XmlElement signerRole = xmlDoc.CreateElement("xades:SignerRole");
+        signedSigProps.AppendChild(signerRole);
 
-        [XmlAttribute(AttributeName = "ubltr")]
-        public string Ubltr;
+        // xades:ClaimedRoles öðesi
+        XmlElement claimedRoles = xmlDoc.CreateElement("xades:ClaimedRoles");
+        signerRole.AppendChild(claimedRoles);
 
-        [XmlAttribute(AttributeName = "qdt")]
-        public string Qdt;
+        // xades:ClaimedRole öðesi
+        XmlElement claimedRole = xmlDoc.CreateElement("xades:ClaimedRole");
+        claimedRole.InnerText = "Tedarikçi";
+        claimedRoles.AppendChild(claimedRole);
 
-        [XmlAttribute(AttributeName = "ext")]
-        public string Ext;
+        // Diðer alt öðelerin eklenmesi...
 
-        [XmlAttribute(AttributeName = "ds")]
-        public string Ds;
+        // ds:Reference alt öðeleri
+        XmlElement transforms = xmlDoc.CreateElement("ds:Transforms");
+        XmlElement transform = xmlDoc.CreateElement("ds:Transform");
+        transform.SetAttribute("Algorithm", "http://www.w3.org/2000/09/xmldsig#enveloped-signature");
+        transforms.AppendChild(transform);
+        reference.AppendChild(transforms);
 
-        [XmlAttribute(AttributeName = "xsi")]
-        public string Xsi;
+        XmlElement digestMethod = xmlDoc.CreateElement("ds:DigestMethod");
+        digestMethod.SetAttribute("Algorithm", "http://www.w3.org/2001/04/xmlenc#sha256");
+        reference.AppendChild(digestMethod);
 
-        [XmlAttribute(AttributeName = "schemaLocation")]
-        public string SchemaLocation;
+        XmlElement digestValue = xmlDoc.CreateElement("ds:DigestValue");
+        digestValue.InnerText = "mlTwy1zNm4dBEo1Q/97X9gBxOn0tIfsMKFzb++8RmGA="; // Buraya digest deðerini ekleyin
+        reference.AppendChild(digestValue);
 
-        [XmlText]
-        public string Text;
-    }
+        // ds:KeyInfo alt öðeleri
+        XmlElement keyValue = xmlDoc.CreateElement("ds:KeyValue");
+        XmlElement rsaKeyValue = xmlDoc.CreateElement("ds:RSAKeyValue");
+        keyValue.AppendChild(rsaKeyValue);
+        keyInfo.AppendChild(keyValue);
 
-    [XmlRoot(ElementName = "ElementList")]
-    public class ElementList
-    {
+        // Burada RSA Key Value alt öðeleri (ds:Modulus ve ds:Exponent) eklenmelidir
+        // Modulus ve Exponent deðerlerini kendi kullaným durumunuza göre eklemelisiniz
 
-        [XmlElement(ElementName = "Invoice")]
-        public Invoice Invoice;
-    }
+        XmlElement modulus = xmlDoc.CreateElement("ds:Modulus");
+        modulus.InnerText = "g4fWV5+GRbNQTnVpG5naG/4xC167blIngQJdOJVss7LSBjFkOOitvJtpV0Qvsld1HzW9A+P8aR17KdgZzqsc5+akR0+volN2ZH9M+q0Xza7zSQjgBzovv2R6VQWLnEyFb4i3PzEqQMDbF8n30oNWj0BjBvNn+eTkxmk8ifhLDAwrrDasje5CudTNo9pIv73VcJqA3F+pKwW7MGIZeDJpLnbbqz+ELOIR3ev51Ewb889QQyqlMiu2LKaDVmpsFzAlFo25ayLTJ896/cL0Lff+/W+CKeOo3f/SrAcZWp0RWmiKZDET9LqCodeH+2x3M8+KK2IwjABk378e8/TipjfENQ==";
+        rsaKeyValue.AppendChild(modulus);
 
-    [XmlRoot(ElementName = "Elements")]
-    public class Elements
-    {
+        XmlElement exponent = xmlDoc.CreateElement("ds:Exponent");
+        exponent.InnerText = "AQAB";
+        rsaKeyValue.AppendChild(exponent);
 
-        [XmlElement(ElementName = "ElementType")]
-        public string ElementType;
+        // ds:X509Data alt öðeleri
+        XmlElement x509Data = xmlDoc.CreateElement("ds:X509Data");
+        XmlElement x509SubjectName = xmlDoc.CreateElement("ds:X509SubjectName");
+        x509SubjectName.InnerText = "CN=e-Fatura Deneme A.Þ.,2.5.4.5=#130a39393939393939393939,OU=e-Fatura Deneme A.Þ.";
+        x509Data.AppendChild(x509SubjectName);
 
-        [XmlElement(ElementName = "ElementCount")]
-        public int ElementCount;
+        XmlElement x509Certificate = xmlDoc.CreateElement("ds:X509Certificate");
+        x509Certificate.InnerText = "MIIFrDCCBJSgAwIBAgIGAJpaGcRq..."; // Buraya sertifika deðerini ekleyin
+        x509Data.AppendChild(x509Certificate);
 
-        [XmlElement(ElementName = "ElementList")]
-        public ElementList ElementList;
-    }
+        keyInfo.AppendChild(x509Data);
 
-    [XmlRoot(ElementName = "Package")]
-    public class Package
-    {
+        // ds:Object alt öðeleri
+        XmlElement certObj = xmlDoc.CreateElement("xades:Certificate");
+        // ... Diðer alt öðeleri buraya eklemelisiniz ...
 
-        [XmlElement(ElementName = "Elements")]
-        public Elements Elements;
-    }
+        obj.AppendChild(certObj);
 
-    [XmlRoot(ElementName = "StandardBusinessDocument")]
-    public class StandardBusinessDocument
-    {
+        // Diðer alt öðelerinizi ekleyin...
 
-        [XmlElement(ElementName = "StandardBusinessDocumentHeader")]
-        public StandardBusinessDocumentHeader StandardBusinessDocumentHeader;
+        // Son olarak XML'i konsola yazdýrma
+        Console.WriteLine(xmlDoc.OuterXml);
 
-        [XmlElement(ElementName = "Package")]
-        public Package Package;
 
-        [XmlAttribute(AttributeName = "sh")]
-        public string Sh;
+        // XML'i konsola yazdýrma
+        Console.WriteLine(xmlDoc.OuterXml);
 
-        [XmlAttribute(AttributeName = "ef")]
-        public string Ef;
 
-        [XmlAttribute(AttributeName = "xsi")]
-        public string Xsi;
 
-        [XmlAttribute(AttributeName = "schemaLocation")]
-        public string SchemaLocation;
+        // Diðer öðeleri ekleyin...
 
-        [XmlText]
-        public string Text;
+        // Örnek XML'i konsola yazdýrma
+        Console.WriteLine(xmlDoc.OuterXml);
     }
-
-
 }
